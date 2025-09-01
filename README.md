@@ -102,9 +102,10 @@ caiyun-fronted/
 ├── index.html               # HTML模板
 ├── vite.config.ts           # Vite配置
 └── tailwind.config.js       # Tailwind配置
-``` [6](#0-5) 
+``` 
 
 ### 后端结构
+
 ```
 caiyun-web/
 ├── caiyun-framework/        # 框架层
@@ -112,7 +113,7 @@ caiyun-web/
 │   └── caiyun-spring-boot-starter-biz-operationlog/  # 操作日志
 └── caiyun-module/           # 业务模块
     └── caiyun-module-system/  # 系统模块
-``` [7](#0-6) 
+``` 
 
 ## 🎨 UI设计
 
