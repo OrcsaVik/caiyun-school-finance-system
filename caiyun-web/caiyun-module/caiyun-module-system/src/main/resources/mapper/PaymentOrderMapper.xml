@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.caiyun.mapper.PaymentOrderMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.github.caiyun.pay.model.entity.RefundRecordDO">
+        <id column="id" property="id"/>
+        <result column="order_id" property="orderId"/>
+        <result column="user_id" property="userId"/>
+        <result column="amount" property="amount"/>
+        <result column="status" property="status"/>
+        <result column="reason" property="reason"/>
+        <result column="description" property="description"/>
+        <result column="refund_no" property="refundNo"/>
+        <result column="refund_time" property="refundTime"/>
+        <result column="fail_reason" property="failReason"/>
+        <result column="expected_arrival_time" property="expectedArrivalTime"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="deleted" property="deleted"/>
+    </resultMap>
+
+
+    <!-- 统计用户待缴费项目数量和金额 -->
+    <select id="selectPendingStatistics" resultType="java.util.Map">
+        SELECT 
+            COUNT(1) as count,
+            COALESCE(SUM(amount), 0) as amount
+        FROM payment_order
+        WHERE user_id = #{userId}
+        AND status = 'PENDING'
+        AND deleted = 0
+    </select>
+
+    <!-- 统计用户已缴费项目数量和金额 -->
+    <select id="selectPaidStatistics" resultType="java.util.Map">
+        SELECT 
+            COUNT(1) as count,
+            COALESCE(SUM(amount), 0) as amount
+        FROM payment_order
+        WHERE user_id = #{userId}
+        AND status = 'PAID'
+        AND deleted = 0
+    </select>
+
+    <!-- 统计用户退款项目数量和金额 -->
+    <select id="selectRefundStatistics" resultType="java.util.Map">
+        SELECT 
+            COUNT(1) as count,
+            COALESCE(SUM(refund_amount), 0) as amount
+        FROM payment_order
+        WHERE user_id = #{userId}
+        AND status = 'REFUNDED'
+        AND deleted = 0
+    </select>
+
+    <!-- 统计各缴费项目类别的数据 -->
+    <select id="selectCategoryStatistics" resultType="java.util.Map">
+        SELECT 
+            pi.category,
+            COUNT(1) as count,
+            COALESCE(SUM(po.amount), 0) as amount,
+            COUNT(DISTINCT po.user_id) as userCount
+        FROM payment_order po
+        LEFT JOIN payment_item pi ON po.item_id = pi.id
+        WHERE po.user_id = #{userId}
+        AND po.status = 'PAID'
+        AND po.deleted = 0
+        GROUP BY pi.category
+    </select>
+
+    <!-- 统计近6个月的缴费趋势 -->
+    <select id="selectMonthlyTrend" resultType="java.util.Map">
+        SELECT 
+            DATE_FORMAT(po.create_time, '%Y-%m') as month,
+            COUNT(1) as count,
+            COALESCE(SUM(po.amount), 0) as amount,
+            COUNT(DISTINCT po.user_id) as userCount
+        FROM payment_order po
+        WHERE po.user_id = #{userId}
+        AND po.status = 'PAID'
+        AND po.deleted = 0
+        AND po.create_time >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
+        GROUP BY DATE_FORMAT(po.create_time, '%Y-%m')
+        ORDER BY month DESC
+    </select>
+
+    <select id="selectHistoryPage" resultType="com.github.caiyun.pay.model.entity.PaymentOrderDO">
+        SELECT po.*
+        FROM payment_order po
+        LEFT JOIN payment_item pi ON po.item_id = pi.id
+        WHERE po.user_id = #{userId}
+        <!-- 使用 query.itemName 访问 query 对象的属性 -->
+        <if test="query.itemName != null and query.itemName != ''">
+            AND pi.name LIKE CONCAT('%', #{query.itemName}, '%')
+        </if>
+        <!-- 使用 query.category 访问 query 对象的属性 -->
+        <if test="query.category != null and query.category != ''">
+            AND pi.category = #{query.category}
+        </if>
+        <!-- 使用 query.status 访问 query 对象的属性 -->
+        <if test="query.status != null and query.status != ''">
+            AND po.status = #{query.status}
+        </if>
+        <!-- 使用 query.paymentMethod 访问 query 对象的属性 -->
+        <if test="query.paymentMethod != null and query.paymentMethod != ''">
+            AND po.payment_method = #{query.paymentMethod}
+        </if>
+        <!-- 使用 query.startTime 访问 query 对象的属性 -->
+        <if test="query.startTime != null and query.startTime != ''">
+            AND po.create_time >= #{query.startTime}
+        </if>
+        <!-- 使用 query.endTime 访问 query 对象的属性 -->
+        <if test="query.endTime != null and query.endTime != ''">
+            AND po.create_time &lt;= #{query.endTime}
+        </if>
+        ORDER BY po.create_time DESC
+    </select>
+
+</mapper>

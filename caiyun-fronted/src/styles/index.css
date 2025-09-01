@@ -1,0 +1,236 @@
+﻿@import "tailwindcss";
+
+:root {
+  /* 主题色变量 */
+  --primary-color: #1a73e8;
+  --primary-hover: #1565c0;
+  --primary-light: #e8f0fe;
+  --success-color: #34a853;
+  --success-light: #ecfdf5;
+  --warning-color: #fbbc05;
+  --warning-light: #fffbeb;
+  --danger-color: #ea4335;
+  --danger-light: #fef2f2;
+  --info-color: #4285f4;
+  --info-light: #f0f7ff;
+  
+  /* 中性色变量 */
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+  
+  /* 阴影变量 */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  
+  /* 过渡变量 */
+  --transition-fast: 0.15s ease-in-out;
+  --transition-normal: 0.3s ease-in-out;
+  --transition-slow: 0.5s ease-in-out;
+  
+  /* 圆角变量 */
+  --radius-sm: 0.25rem;
+  --radius: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-full: 9999px;
+}
+
+/* 自定义全局样式 */
+body {
+  background-color: var(--gray-50);
+  color: var(--gray-800);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  line-height: 1.5;
+  transition: background-color var(--transition-normal);
+}
+
+/* 卡片样式 */
+.el-card {
+  box-shadow: var(--shadow);
+  border-radius: var(--radius-md);
+  transition: box-shadow var(--transition-normal), transform var(--transition-normal);
+  border: none;
+}
+
+.el-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.el-card__header {
+  padding: 1rem 1.25rem;
+  font-weight: 600;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+/* 按钮样式 */
+.el-button {
+  border-radius: var(--radius);
+  transition: all var(--transition-fast);
+  font-weight: 500;
+}
+
+.el-button--primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.el-button--primary:hover,
+.el-button--primary:focus {
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.el-button--success {
+  background-color: var(--success-color);
+  border-color: var(--success-color);
+}
+
+.el-button--warning {
+  background-color: var(--warning-color);
+  border-color: var(--warning-color);
+}
+
+.el-button--danger {
+  background-color: var(--danger-color);
+  border-color: var(--danger-color);
+}
+
+/* 标签样式 */
+.el-tag {
+  border-radius: var(--radius-sm);
+  padding: 0.25rem 0.5rem;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.el-tag.el-tag--success {
+  background-color: var(--success-light);
+  color: var(--success-color);
+  border-color: var(--success-color);
+}
+
+.el-tag.el-tag--warning {
+  background-color: var(--warning-light);
+  color: var(--warning-color);
+  border-color: var(--warning-color);
+}
+
+.el-tag.el-tag--danger {
+  background-color: var(--danger-light);
+  color: var(--danger-color);
+  border-color: var(--danger-color);
+}
+
+.el-tag.el-tag--info {
+  background-color: var(--info-light);
+  color: var(--info-color);
+  border-color: var(--info-color);
+}
+
+/* 输入框样式 */
+.el-input__inner {
+  border-radius: var(--radius);
+  transition: all var(--transition-fast);
+}
+
+.el-input__inner:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+}
+
+/* 下拉菜单样式 */
+.el-select-dropdown {
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--gray-200);
+}
+
+.el-select-dropdown__item.selected {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+/* 表格样式 */
+.el-table {
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.el-table th {
+  background-color: var(--gray-100);
+  font-weight: 600;
+}
+
+/* 分页样式 */
+.el-pagination.is-background .el-pager li:not(.disabled).active {
+  background-color: var(--primary-color);
+}
+
+/* 登录页背景与面板尺寸 */
+.auth-bg {
+  background: url('/dz_bg.jpg') center/cover no-repeat, linear-gradient(180deg, #bde4ea 0%, #e6f6f9 100%);
+}
+
+.auth-panel {
+  width: 100%;
+  max-width: 960px;
+  box-shadow: var(--shadow-lg);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+/* 通用过渡效果 */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity var(--transition-normal);
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* 响应式容器 */
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
